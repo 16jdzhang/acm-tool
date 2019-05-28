@@ -7,7 +7,7 @@ using namespace std;
 class BigNum {
 	vector<int> buf;
 public:
-	static const int w = 9;
+	static const int w = 8;
 	BigNum() {
 		buf.push_back(0);
 	}
@@ -20,6 +20,28 @@ public:
 		while (num) {
 			buf.push_back(num%d);
 			num = num / d;
+		}
+	}
+	BigNum(const char* num) {
+		string str(num);
+		stringstream ss;
+		int b = str.length();
+		int e;
+		while (b != 0)
+		{
+			e = b;
+			b -= w;
+			if (b < 0) {
+				b = 0;
+			}
+			ss << str.substr(b, e - b);
+			ss << " ";
+			int val;
+			ss >> val;
+			buf.push_back(val);
+		}
+		if (buf.size() == 0) {
+			buf.push_back(0);
 		}
 	}
 	static BigNum add(const BigNum& _a, const BigNum& _b) {
@@ -89,7 +111,7 @@ public:
 			}
 			result->buf.push_back(push);
 		}
-		for (size_t i = result->buf.size() - 1; i > 0; i--)
+		for (size_t i = result->buf.size()-1; i  > 0; i--)
 		{
 			if (result->buf[i] == 0) {
 				result->buf.erase(result->buf.begin() + i);
@@ -120,4 +142,7 @@ int main() {
 	//减法，求出的是绝对值，即总是用大的减小的
 	a = BigNum::sub(a, BigNum(999999999));
 	cout << a.to_string() << endl;
+	a = BigNum("123456789");
+	cout << a.to_string();
+	return 0;
 }
